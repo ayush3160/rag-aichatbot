@@ -7,10 +7,7 @@ export class CreateAuthDto {
     password: string;
 
     @IsString()
-    firstName: string;
-
-    @IsString()
-    lastName: string;
+    organisationName: string;
 }
 
 export class LoginAuthDto {

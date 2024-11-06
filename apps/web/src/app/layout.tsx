@@ -3,6 +3,8 @@ import { Metadata } from 'next';
 import * as React from 'react';
 import { Inter } from 'next/font/google';
 import { ThemeProvider } from "@/components/theme.provider";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -19,6 +21,7 @@ export default function RootLayout({
     return (
         <html lang="en" suppressHydrationWarning>
             <body className={inter.className}>
+                <ToastContainer />
                 <ThemeProvider
                     attribute="class"
                     defaultTheme="dark"

@@ -8,15 +8,36 @@ import { Label } from "@/components/ui/label";
 import { BarChart2, Loader2 } from "lucide-react";
 import { SocialAuthButtons } from "@/components/auth/social-auth-buttons";
 import { AuthSeparator } from "@/components/auth/auth-separator";
+import { useRouter } from "next/router";
+import { loginUser } from "@/api/authApi";
+import { setItemToLocalStorage } from "@/lib/utils";
 
 export default function LoginPage() {
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    const formData = new FormData(e.target as HTMLFormElement);
+
+    const data = {
+      email: formData.get("email")?.toString() || "",
+      password: formData.get("password")?.toString() || "",
+    };
+
+    const response = await loginUser(data);
+
+    if("error" in response) {
+      console.error(response.error);
+      setIsLoading(false);
+    }else {
+      setItemToLocalStorage("token", response.token);
+      setIsLoading(false);
+      router.push("/dashboard");
+    }
+
     setIsLoading(false);
   };
 

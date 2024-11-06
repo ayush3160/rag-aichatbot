@@ -10,8 +10,5 @@ export class User extends BaseEntity {
     password: string;
 
     @Column()
-    firstName: string;
-
-    @Column()
-    lastName: string;
+    organisationName: string;
 }

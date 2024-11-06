@@ -8,16 +8,33 @@ import { Label } from "@/components/ui/label";
 import { BarChart2, Loader2 } from "lucide-react";
 import { SocialAuthButtons } from "@/components/auth/social-auth-buttons";
 import { AuthSeparator } from "@/components/auth/auth-separator";
+import { registerUser } from "@/api/authApi";
+import { setItemToLocalStorage } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 
 export default function RegisterPage() {
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    setIsLoading(false);
+    const formData = new FormData(e.target as HTMLFormElement);
+    const data = {
+      organisationName: formData.get("organisation-name")?.toString() || "",
+      email: formData.get("email")?.toString() || "",
+      password: formData.get("password")?.toString() || "",
+    };
+
+    const response = await registerUser(data);
+    
+    if("error" in response) {
+      console.error(response.error);
+      setIsLoading(false);
+    }else{
+      setItemToLocalStorage("token", response.token);
+      setIsLoading(false);
+      router.push("/dashboard");
+    }
   };
 
   return (
@@ -38,8 +55,8 @@ export default function RegisterPage() {
 
         <form onSubmit={onSubmit} className="space-y-6">
           <div className="space-y-2">
-            <Label htmlFor="name">Full Name</Label>
-            <Input id="name" required />
+            <Label htmlFor="name">Organisation's Name</Label>
+            <Input id="organisation-name" required />
           </div>
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>

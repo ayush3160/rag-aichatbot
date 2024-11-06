@@ -9,7 +9,7 @@ export class AuthController {
   constructor(private readonly authService: AuthService) { }
 
   @Post('signup')
-  async create(@Body() createAuthDto: CreateAuthDto): Promise<{ message: string, data: any }> {
+  async create(@Body() createAuthDto: CreateAuthDto): Promise<{ message: string, token: string }> {
 
     const existingUser = await this.authService.findByEmail(createAuthDto.email);
 
@@ -23,7 +23,12 @@ export class AuthController {
 
     const user = await this.authService.create(createAuthDto);
 
-    return { message: "User Created", data: user }
+    const token = jwt.sign({
+      id: user.id,
+      organisationName: user.organisationName
+    }, process.env.JWT_SECRET);
+
+    return { message: "User Created", token: token }
   }
 
   @Post('signin')
@@ -42,8 +47,7 @@ export class AuthController {
 
     const token = jwt.sign({
       id: user.id,
-      firstName: user.firstName,
-      lastName: user.lastName
+      organisationName: user.organisationName
     }, process.env.JWT_SECRET);
 
     return { message: "Login successful", token: token }
