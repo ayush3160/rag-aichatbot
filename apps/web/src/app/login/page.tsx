@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { BarChart2, Loader2 } from "lucide-react";
 import { SocialAuthButtons } from "@/components/auth/social-auth-buttons";
 import { AuthSeparator } from "@/components/auth/auth-separator";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { loginUser } from "@/api/authApi";
 import { setItemToLocalStorage } from "@/lib/utils";
 
