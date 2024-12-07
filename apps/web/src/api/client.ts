@@ -5,13 +5,14 @@ const apiClient : AxiosInstance = axios.create({
     baseURL: process.env.NEXT_PUBLIC_BACKEND_URL,
     headers: {
         'Content-Type': 'application/json',
+        'Authorization': `${localStorage.getItem('token')}`
     },
 });
 
 apiClient.interceptors.response.use(
     response => response,
     error => {
-      const customErrorMessage = error.response?.message || 'An unexpected error occurred';
+      const customErrorMessage = error.response?.data?.message || 'An unexpected error occurred';
       toast.error(customErrorMessage);  
       return Promise.reject(new Error(customErrorMessage));
     }

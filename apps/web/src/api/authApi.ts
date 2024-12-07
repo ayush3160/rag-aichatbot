@@ -4,7 +4,6 @@ import { AUTH_ENDPOINTS } from "./endpoints";
 
 export const registerUser = async ( registerUser : RegisterUserBody) : Promise<RegisterUserResponse | ApiError> => {
     try {
-        console.log(process.env.BACKEND_URL);
         const response = await apiClient.post(AUTH_ENDPOINTS.AUTH_REGISTER, registerUser);
         return response.data;    
     } catch (error : any) {

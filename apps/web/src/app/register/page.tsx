@@ -28,7 +28,7 @@ export default function RegisterPage() {
     const response = await registerUser(data);
     
     if("error" in response) {
-      console.error(response.error);
+      console.log(response.error);
       setIsLoading(false);
     }else{
       setItemToLocalStorage("token", response.token);
@@ -56,15 +56,15 @@ export default function RegisterPage() {
         <form onSubmit={onSubmit} className="space-y-6">
           <div className="space-y-2">
             <Label htmlFor="name">Organisation's Name</Label>
-            <Input id="organisation-name" required />
+            <Input id="organisation-name" name="organisation-name" required />
           </div>
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
-            <Input id="email" type="email" required />
+            <Input id="email" type="email" name="email" required />
           </div>
           <div className="space-y-2">
             <Label htmlFor="password">Password</Label>
-            <Input id="password" type="password" required />
+            <Input id="password" type="password" name="password" required />
           </div>
           <Button className="w-full" disabled={isLoading}>
             {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}

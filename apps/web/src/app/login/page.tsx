@@ -30,7 +30,6 @@ export default function LoginPage() {
     const response = await loginUser(data);
 
     if("error" in response) {
-      console.error(response.error);
       setIsLoading(false);
     }else {
       setItemToLocalStorage("token", response.token);
@@ -60,11 +59,11 @@ export default function LoginPage() {
         <form onSubmit={onSubmit} className="space-y-6">
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
-            <Input id="email" type="email" required />
+            <Input id="email" name="email" type="email" required />
           </div>
           <div className="space-y-2">
             <Label htmlFor="password">Password</Label>
-            <Input id="password" type="password" required />
+            <Input id="password" name="password" type="password" required />
           </div>
           <Button className="w-full" disabled={isLoading}>
             {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}

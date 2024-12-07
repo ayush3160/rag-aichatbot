@@ -1,5 +1,6 @@
-import { Entity , Column } from "typeorm";
+import { Entity , Column, OneToMany } from "typeorm";
 import { BaseEntity } from "./base.entity";
+import { Project } from "./project.entity";
 
 @Entity({name: 'users'})
 export class User extends BaseEntity {
@@ -11,4 +12,7 @@ export class User extends BaseEntity {
 
     @Column()
     organisationName: string;
+
+    @OneToMany(() => Project, (project) => project.createdBy)
+    projects: Project[];
 }
