@@ -3,11 +3,13 @@ import { AuthModule } from './auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { configService } from './config/config.service';
 import { JwtMiddleware } from './middlewares/jwt-auth.middleware';
+import { ProjectModule } from './projects/project.module';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot(configService.getTypeOrmConfig()),
-    AuthModule
+    AuthModule,
+    ProjectModule
   ],
 })
 export class AppModule {
@@ -15,8 +17,8 @@ export class AppModule {
     consumer
       .apply(JwtMiddleware)
       .exclude(
-        { path: 'api/signin', method: RequestMethod.POST }, 
-        { path: 'api/signup', method: RequestMethod.POST }, 
+        { path: 'auth/signin', method: RequestMethod.POST }, 
+        { path: 'auth/signup', method: RequestMethod.POST }, 
       )
       .forRoutes('*'); // Apply to all other routes
   }

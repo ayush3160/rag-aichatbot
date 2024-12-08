@@ -3,6 +3,7 @@ import { AuthService } from './auth.service';
 import { CreateAuthDto, LoginAuthDto } from './dto/auth.dto';
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
+import { UserTokenPayload } from 'src/types/types';
 
 @Controller('auth')
 export class AuthController {
@@ -23,7 +24,7 @@ export class AuthController {
 
     const user = await this.authService.create(createAuthDto);
 
-    const token = jwt.sign({
+    const token = jwt.sign(<UserTokenPayload>{
       id: user.id,
       organisationName: user.organisationName
     }, process.env.JWT_SECRET);

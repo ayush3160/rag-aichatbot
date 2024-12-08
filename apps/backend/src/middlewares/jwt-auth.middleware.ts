@@ -4,7 +4,7 @@ import * as jwt from 'jsonwebtoken';
 
 export class JwtMiddleware implements NestMiddleware {
     use(req: Request, res: Response, next: NextFunction) {
-        const token = req.headers['authorization']?.split(' ')[1];
+        const token = req.headers['authorization'];
 
         if (!token) {
             throw new UnauthorizedException('Token not provided');

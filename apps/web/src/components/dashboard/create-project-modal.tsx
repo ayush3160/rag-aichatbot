@@ -54,6 +54,7 @@ export function CreateProjectModal({
             <Label htmlFor="name">Project Name</Label>
             <Input
               id="name"
+              name="name"
               value={formData.name}
               onChange={(e) =>
                 setFormData((prev) => ({ ...prev, name: e.target.value }))
@@ -65,6 +66,7 @@ export function CreateProjectModal({
             <Label htmlFor="website">Website</Label>
             <Input
               id="website"
+              name="website"
               type="url"
               value={formData.website}
               onChange={(e) =>
@@ -77,6 +79,7 @@ export function CreateProjectModal({
             <Label htmlFor="description">Description</Label>
             <Textarea
               id="description"
+              name="description"
               value={formData.description}
               onChange={(e) =>
                 setFormData((prev) => ({ ...prev, description: e.target.value }))

@@ -4,24 +4,39 @@ import { useEffect, useState } from "react";
 import { ProjectList } from "@/components/dashboard/project-list";
 import { CreateProjectModal } from "@/components/dashboard/create-project-modal";
 import { DashboardHeader } from "@/components/dashboard/dashboard-header";
-import { Project } from "@/types/project";
+import { Project, ProjectRequestBody } from "@/types/project";
+import { CreateProject, GetProjects } from "@/api/projectApi";
+import { useRouter } from "next/navigation";
 
 export default function DashboardPage() {
+  const router = useRouter();
   const [projects, setProjects] = useState<Project[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    // Show modal if no projects exist
-    if (projects.length === 0) {
-      setIsModalOpen(true);
-    }
+    getProjects();
   }, [projects]);
 
-  const handleCreateProject = (project: Project) => {
-    setProjects((prev) => [...prev, project]);
-    setIsModalOpen(false);
+  const handleCreateProject = async (project: ProjectRequestBody) => {
+    const response = await CreateProject(project);
+
+    if ("error" in response) {
+      console.error(response.error);
+    } else {
+      router.push("/project/" + response.id);
+      setIsModalOpen(false);
+    }
   };
 
+  const getProjects = async () => {
+    const projects = await GetProjects();
+
+    if ("error" in projects) {
+      console.error(projects.error);
+    } else {
+      setProjects(projects);
+    }
+  }
   return (
     <div className="min-h-screen bg-background">
       <DashboardHeader onCreateProject={() => setIsModalOpen(true)} />
