@@ -7,3 +7,8 @@ export const enum PROJECT_ENDPOINTS {
   PROJECT_CREATE = '/api/project/create',
   PROJECT_ALL_PROJECTS = '/api/project/allprojects'
 }
+
+export const enum SCRAP_ENDPOINTS {
+  START_SCRAPPING = '/api/scrap/start',
+  GET_PROJECT = '/api/project/projectById'
+}

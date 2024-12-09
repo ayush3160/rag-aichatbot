@@ -34,7 +34,10 @@ export class ProjectService {
         });
     }
 
-    async edit() {
-    
+    async getProjectById(userId : string, projectId : string) : Promise<Project> {
+        return this.projectRepository.findOne({
+            where: { id: projectId, createdBy: { id: userId } },
+            relations: ['createdBy']
+        });
     }
 }

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post , Request } from "@nestjs/common";
+import { Body, Controller, Get, Param, Post , Request } from "@nestjs/common";
 import { ProjectService } from "./project.service";
 import { ProjectDto } from "./dto/project.dto";
 import { Project } from "src/models/project.entity";
@@ -21,6 +21,12 @@ export class ProjectController {
         const user : UserTokenPayload = req['user'];
 
         return this.ProjectService.getAllProjectsOfUser(user.id);
+    }
+
+    @Get("projectById/:projectId")
+    async project(@Request() req : Request,@Param() {projectId} : {projectId : string}) : Promise<Project> {
+        const user : UserTokenPayload = req['user'];
+        return this.ProjectService.getProjectById(user.id,projectId);
     }
 
     @Post("edit")

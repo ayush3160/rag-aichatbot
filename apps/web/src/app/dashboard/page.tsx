@@ -15,7 +15,7 @@ export default function DashboardPage() {
 
   useEffect(() => {
     getProjects();
-  }, [projects]);
+  }, []);
 
   const handleCreateProject = async (project: ProjectRequestBody) => {
     const response = await CreateProject(project);

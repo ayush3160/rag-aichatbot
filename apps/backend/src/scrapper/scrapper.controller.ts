@@ -1,8 +1,8 @@
-import { Body, Controller, Get, Sse } from '@nestjs/common';
+import { Body, Controller, Get, Sse, Post } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { ScrapperStreamService } from './scrapper.service';
 
-@Controller('events')
+@Controller('scrap')
 export class ScrapperController {
   constructor(private readonly eventStreamService: ScrapperStreamService) {}
 
@@ -13,9 +13,9 @@ export class ScrapperController {
   }
 
   // Endpoint to start the scraping process
-  @Get('start')
-  async startProcess(@Body() url : string): Promise<string> {
-    await this.eventStreamService.runProcess(); // Run the process that emits events
-    return 'Process started';
+  @Post('start')
+  async startProcess(@Body() {url,projectId} : {url : string,projectId : string}): Promise<string> {
+    await this.eventStreamService.runProcess(url,projectId); // Run the process that emits events
+    return 'Process Completed';
   }
 }

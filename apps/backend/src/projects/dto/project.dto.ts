@@ -5,7 +5,6 @@ export class ProjectDto {
     @MinLength(3)
     name: string
 
-    @IsUrl()
     website : string
 
     @IsString()
