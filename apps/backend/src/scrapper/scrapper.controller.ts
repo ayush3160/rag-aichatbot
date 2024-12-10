@@ -16,6 +16,6 @@ export class ScrapperController {
   @Post('start')
   async startProcess(@Body() {url,projectId} : {url : string,projectId : string}): Promise<string> {
     await this.eventStreamService.runProcess(url,projectId); // Run the process that emits events
-    return 'Process Completed';
+    return `http://localhost:8000/api/chatwidget/widget/${projectId}`;
   }
 }

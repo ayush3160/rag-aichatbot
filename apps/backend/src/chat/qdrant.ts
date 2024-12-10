@@ -19,8 +19,8 @@ const generateVector = async (text: string[]): Promise<EmbedResponse | undefined
         return await cohere.embed({ texts: text });
     } catch (error) {
         console.error("Error generating vector", error);
-        }
     }
+}
 
 
 const ensureCollectionExists = async (collectionName: string) => {
@@ -57,7 +57,7 @@ export const storeDocuments = async (data: ExtractedDocument[], collectionName: 
                     // Remove newline characters
                     normalizedText = normalizedText.replace(/[\r\n]+/g, '');
 
-                    if(typeof data[j].body === 'string'){
+                    if (typeof data[j].body === 'string') {
                         textArray.push(data[j].body);
                     }
                 }
@@ -88,3 +88,33 @@ export const storeDocuments = async (data: ExtractedDocument[], collectionName: 
         console.log("Error", e)
     }
 };
+
+export const searchDocuments = async (query: string, topK: number = 5, collectionName: string) => {
+    try {
+        // Generate vector for the search query
+        const queryVector = await generateVector([query]);
+
+        // Perform the search
+        const searchResults = await qdrantClient.search(collectionName, {
+            vector: queryVector.embeddings[0], // Vector of the search query
+            limit: topK, // Number of top results to return
+        });
+
+        // Extract and return the payloads of the matching points
+        return searchResults.map((result) => ({
+            score: result.score, // Similarity score
+            document: result.payload, // Original document stored in Qdrant
+        }));
+    } catch (error) {
+        console.error("Error searching documents", error);
+    }
+};
+
+export const llmCall = async (prompt: string) => {
+    try {
+        const response = await cohere.generate({ prompt: prompt });
+        return response.generations[0].text;
+    } catch (error) {
+        console.error("Error generating vector", error);
+    }
+}

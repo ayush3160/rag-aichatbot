@@ -2,7 +2,11 @@ import React, { useState } from 'react';
 import { MessageSquare, X, Send } from 'lucide-react';
 import { ChatMessage } from './ChatMessage';
 
-export const ChatWidget: React.FC = () => {
+interface ChatWidgetProps {
+  projectId: string;
+}
+
+export const ChatWidget: React.FC<ChatWidgetProps> = ({ projectId }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Array<{ text: string; isBot: boolean }>>([
     { text: "Hello! How can I help you today?", isBot: true }
@@ -16,12 +20,23 @@ export const ChatWidget: React.FC = () => {
     setMessages(prev => [...prev, { text: input, isBot: false }]);
     setInput('');
 
-    setTimeout(() => {
-      setMessages(prev => [
-        ...prev,
-        { text: "Thanks for your message! This is a demo response.", isBot: true }
-      ]);
-    }, 1000);
+    fetch(`${process.env.VITE_REACT_APP_API_URL}/api/chat/query`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ query: input, projectId })
+    })
+      .then((data) => {
+        data.body?.getReader().read().then(({ value }) => {
+          const response = new TextDecoder('utf-8').decode(value);
+          console.log(response);
+          setMessages(prev => [...prev, { text: response, isBot: true }]);
+        });
+      })
+      .catch(err => {
+        console.error('Failed to send message', err);
+      });
   };
 
   return (

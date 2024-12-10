@@ -16,7 +16,6 @@ declare global {
 }
 
 window.mountJeemagent = ({projectId} : {projectId : string}) => {
-  console.log(projectId);
   const container = document.createElement("div");
   container.id = id;
   document.body.appendChild(container);
@@ -36,7 +35,7 @@ window.mountJeemagent = ({projectId} : {projectId : string}) => {
   root = ReactDOM.createRoot(shadowRootElement);
   root.render(
     <React.StrictMode>
-      <App />
+      <App projectId={projectId} />
     </React.StrictMode>
   );
 };

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { ProjectHeader } from "@/components/project/project-header";
 import { SetupStep } from "@/components/project/setup-steps";
 import { getProject, scrapeWebsite } from "@/api/scrapApi";
+import Script from "next/script";
 
 type StepStatus = "pending" | "loading" | "completed";
 
@@ -35,6 +36,8 @@ export default function Project({
         },
     ]);
 
+    const [chatlink, setLink] = useState<string>("");
+
     useEffect(() => {
         setSteps((prev) =>
             prev.map((step, i) =>
@@ -44,21 +47,22 @@ export default function Project({
         const fetchData = async () => {
             const project = await getProject(projectId);
 
-            if('error' in project) {
+            if ('error' in project) {
                 console.error("Failed to fetch project data", project.error);
                 return;
             }
 
-            startScrapping(project.website,project.id);
+            startScrapping(project.website, project.id);
         };
-    
+
         fetchData();
     }, []);
 
-    const startScrapping = async (url : string,projectId : string) => {
+    const startScrapping = async (url: string, projectId: string) => {
         try {
             listenToScrappingEvents();
-            const response = await scrapeWebsite(url,projectId);
+            const response = await scrapeWebsite(url, projectId);
+            setLink(response.toString());
         } catch (error) {
             console.error("Failed to start scrapping process", error);
         }
@@ -115,16 +119,28 @@ export default function Project({
             <ProjectHeader />
             <main className="px-12 py-12 flex justify-center items-center">
                 <div className="space-y-12 w-full max-w-2xl">
-                    {steps.map((step, index) => (
-                        <SetupStep
-                            key={index}
-                            step={index + 1}
-                            title={step.title}
-                            description={step.description}
-                            status={step.status}
-                            isLast={index === steps.length - 1}
-                        />
-                    ))}
+                    {
+                        chatlink === "" ? (
+                            steps.map((step: Step, index: number) => (
+                                <SetupStep
+                                    key={index}
+                                    step={index + 1}
+                                    title={step.title}
+                                    description={step.description}
+                                    status={step.status}
+                                    isLast={index === steps.length - 1}
+                                />
+                            ))
+                        ) : (
+                            <div className="flex flex-col items-center space-y-4">
+                                <h3 className="text-xl font-semibold">Your chat widget is ready</h3>
+                                <code className="bg-white text-black p-2 rounded-lg">
+                                    {`<script async defer src="${chatlink}"></script>`}
+                                </code>
+                            </div>
+                        )
+
+                    }
                 </div>
             </main>
         </div>
